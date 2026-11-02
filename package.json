@@ -1,0 +1,45 @@
+{
+  "name": "n8n-nodes-videoupscaler",
+  "version": "0.1.0",
+  "description": "Official n8n community node for VideoUpscaler (https://videoupscaler.co) — automate 1080p, 2K, and 4K AI video upscaling, denoising, stabilization, and 60fps frame interpolation in n8n workflows and AI Agents.",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "videoupscaler",
+    "video-upscaler",
+    "ai-video-upscaler",
+    "4k-video-upscaler",
+    "video-enhancement",
+    "workflow-automation"
+  ],
+  "license": "MIT",
+  "homepage": "https://videoupscaler.co/integrations",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arkyu2077/n8n-nodes-videoupscaler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arkyu2077/n8n-nodes-videoupscaler/issues"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/VideoUpscalerApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/VideoUpscaler/VideoUpscaler.node.js"
+    ]
+  },
+  "scripts": {
+    "build": "tsc && mkdir -p dist/nodes/VideoUpscaler && cp src/nodes/VideoUpscaler/videoupscaler.svg dist/nodes/VideoUpscaler/videoupscaler.svg",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

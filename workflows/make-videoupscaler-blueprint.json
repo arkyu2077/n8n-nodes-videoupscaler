@@ -1,0 +1,90 @@
+{
+  "name": "VideoUpscaler — Upscale Video via Webhook",
+  "flow": [
+    {
+      "id": 1,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://videoupscaler.co/api/v1/upscale",
+        "serializeUrl": false,
+        "method": "post",
+        "headers": [
+          {
+            "name": "Authorization",
+            "value": "Bearer vu_live_YOUR_API_KEY"
+          },
+          {
+            "name": "Idempotency-Key",
+            "value": "{{uuid}}"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "contentType": "application/json",
+        "data": "{\n  \"video_url\": \"https://example.com/clip.mp4\",\n  \"resolution\": \"4k\"\n}",
+        "timeout": 300
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0,
+          "name": "Start VideoUpscaler Job"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {
+        "handleErrors": true,
+        "useNewZLibDeCompress": true
+      },
+      "mapper": {
+        "url": "https://videoupscaler.co/api/v1/tasks/{{1.data.id}}?wait=45",
+        "serializeUrl": false,
+        "method": "get",
+        "headers": [
+          {
+            "name": "Authorization",
+            "value": "Bearer vu_live_YOUR_API_KEY"
+          }
+        ],
+        "qs": [],
+        "parseResponse": true,
+        "timeout": 55
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0,
+          "name": "Wait for Upscaled Video"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "instant": false,
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "us1.make.com"
+  }
+}
