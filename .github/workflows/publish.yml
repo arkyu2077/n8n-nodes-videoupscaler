@@ -23,7 +23,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install TypeScript
-        run: npm install --no-save typescript @types/node
+        run: npm install --no-save typescript@5.7.3 @types/node
 
       - name: Build package
         run: npm run build
