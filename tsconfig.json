@@ -10,9 +10,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "./dist"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["credentials/**/*", "nodes/**/*", "index.ts", "n8n-types.ts"],
   "exclude": ["node_modules", "dist", "test"]
 }
