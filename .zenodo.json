@@ -1,0 +1,43 @@
+{
+  "title": "n8n-nodes-videoupscaler: Official n8n Community Node for VideoUpscaler 4K AI Video Enhancement",
+  "description": "Official n8n community node (`n8n-nodes-videoupscaler`) and AI Agent tool for VideoUpscaler (https://videoupscaler.co) \u2014 automate 1080p, 2K, and 4K AI video upscaling, denoising, stabilization, and 60fps frame interpolation in n8n workflows.",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Yu, Ark",
+      "affiliation": "VideoUpscaler (https://videoupscaler.co)"
+    }
+  ],
+  "keywords": [
+    "video-upscaling",
+    "super-resolution",
+    "4k-video-upscaler",
+    "batch-video-upscaler",
+    "video-enhancement",
+    "frame-interpolation"
+  ],
+  "url": "https://videoupscaler.co",
+  "related_identifiers": [
+    {
+      "identifier": "https://videoupscaler.co",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://videoupscaler.co/4k-video-upscaler",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://videoupscaler.co/integrations",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/arkyu2077/n8n-nodes-videoupscaler",
+      "relation": "isIdenticalTo",
+      "scheme": "url"
+    }
+  ]
+}

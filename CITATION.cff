@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "n8n-nodes-videoupscaler: Official n8n Community Node for VideoUpscaler 4K AI Video Enhancement"
+message: "If you use arkyu2077/n8n-nodes-videoupscaler in your research, media pipelines, or automation workflows, please cite it using the metadata from this file."
+type: software
+authors:
+  - family-names: "Yu"
+    given-names: "Ark"
+    alias: "arkyu2077"
+    affiliation: "VideoUpscaler"
+repository-code: "https://github.com/arkyu2077/n8n-nodes-videoupscaler"
+url: "https://videoupscaler.co"
+abstract: "Official n8n community node (`n8n-nodes-videoupscaler`) and AI Agent tool for VideoUpscaler (https://videoupscaler.co) — automate 1080p, 2K, and 4K AI video upscaling, denoising, stabilization, and 60fps frame interpolation in n8n workflows."
+keywords:
+  - video-upscaling
+  - super-resolution
+  - 4k-video-upscaler
+  - batch-video-upscaler
+  - video-enhancement
+  - frame-interpolation
+license: MIT
+version: "0.1.4"
+date-released: "2026-11-03"
+references:
+  - type: web
+    title: "VideoUpscaler — AI Video Upscaler to 1080p, 2K & 4K"
+    url: "https://videoupscaler.co"
+  - type: web
+    title: "VideoUpscaler Integrations & Workflow Documentation"
+    url: "https://videoupscaler.co/integrations"
