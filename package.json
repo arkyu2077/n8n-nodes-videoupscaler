@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-videoupscaler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Official n8n community node for VideoUpscaler (https://videoupscaler.co) \u2014 automate 1080p, 2K, and 4K AI video upscaling, denoising, stabilization, and 60fps frame interpolation in n8n workflows and AI Agents.",
   "keywords": [
     "n8n-community-node-package",
@@ -41,5 +41,10 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "author": {
+    "name": "ArkYu",
+    "email": "arkyu.008@gmail.com",
+    "url": "https://videoupscaler.co"
   }
 }
