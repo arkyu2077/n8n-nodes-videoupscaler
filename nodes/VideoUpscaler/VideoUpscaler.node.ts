@@ -1,11 +1,15 @@
 import { randomUUID } from 'crypto';
-import type {
-  IDataObject,
-  IExecuteFunctions,
-  INodeExecutionData,
-  INodeType,
-  INodeTypeDescription,
-} from '../../n8n-types';
+import {
+  NodeApiError,
+  NodeConnectionTypes,
+  NodeOperationError,
+  type IDataObject,
+  type IExecuteFunctions,
+  type INodeExecutionData,
+  type INodeType,
+  type INodeTypeDescription,
+  type JsonObject,
+} from 'n8n-workflow';
 
 const DEFAULT_BASE_URL = 'https://videoupscaler.co/api/v1';
 const WAIT_CHUNK_SECONDS = 45;
@@ -46,7 +50,10 @@ export class VideoUpscaler implements INodeType {
   description: INodeTypeDescription = {
     displayName: 'VideoUpscaler',
     name: 'videoUpscaler',
-    icon: 'file:videoupscaler.svg',
+    icon: {
+      light: 'file:videoupscaler.svg',
+      dark: 'file:videoupscaler.dark.svg',
+    },
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -54,8 +61,9 @@ export class VideoUpscaler implements INodeType {
     defaults: {
       name: 'VideoUpscaler',
     },
-    inputs: ['main'],
-    outputs: ['main'],
+    usableAsTool: true,
+    inputs: [NodeConnectionTypes.Main],
+    outputs: [NodeConnectionTypes.Main],
     credentials: [
       {
         name: 'videoUpscalerApi',
@@ -175,9 +183,9 @@ export class VideoUpscaler implements INodeType {
         type: 'options',
         required: true,
         options: [
-          { name: '1080p (Full HD — 1 credit/s)', value: '1080p' },
-          { name: '2K (1440p — 2 credits/s)', value: '2k' },
-          { name: '4K (2160p — 3 credits/s)', value: '4k' },
+          { name: '1080p (Full HD — 1 Credit/s)', value: '1080p' },
+          { name: '2K (1440p — 2 Credits/s)', value: '2k' },
+          { name: '4K (2160p — 3 Credits/s)', value: '4k' },
         ],
         default: '4k',
         description: 'Target upscale resolution',
@@ -233,19 +241,27 @@ export class VideoUpscaler implements INodeType {
         },
         options: [
           {
-            displayName: 'Idempotency Key',
-            name: 'idempotencyKey',
-            type: 'string',
-            default: '',
-            description: 'Unique key (1–255 ASCII chars) so retries never charge twice',
+            displayName: 'Deflicker',
+            name: 'deflicker',
+            type: 'boolean',
+            default: false,
           },
           {
-            displayName: 'Webhook URL',
-            name: 'webhookUrl',
-            type: 'string',
-            default: '',
-            placeholder: 'https://hooks.zapier.com/hooks/catch/...',
-            description: 'Public https:// URL to receive a POST when the task completes or fails',
+            displayName: 'Deinterlace',
+            name: 'deinterlace',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            displayName: 'Denoise Strength',
+            name: 'denoise',
+            type: 'number',
+            default: 0,
+            typeOptions: {
+              minValue: 0,
+              maxValue: 100,
+            },
+            description: 'Denoise level from 0 (off) to 100 (maximum)',
           },
           {
             displayName: 'Engine',
@@ -256,24 +272,6 @@ export class VideoUpscaler implements INodeType {
               { name: 'Anime & 2D Animation', value: 'anime' },
             ],
             default: 'flashvsr',
-          },
-          {
-            displayName: 'Denoise Strength',
-            name: 'denoise',
-            type: 'options',
-            options: [
-              { name: 'Off (0)', value: 0 },
-              { name: 'Light (1)', value: 1 },
-              { name: 'Medium (2)', value: 2 },
-              { name: 'Strong (3)', value: 3 },
-            ],
-            default: 0,
-          },
-          {
-            displayName: 'Stabilize Video',
-            name: 'stabilize',
-            type: 'boolean',
-            default: false,
           },
           {
             displayName: 'Face Restoration',
@@ -294,24 +292,6 @@ export class VideoUpscaler implements INodeType {
             default: 1,
           },
           {
-            displayName: 'Slow Motion',
-            name: 'slowMotion',
-            type: 'boolean',
-            default: false,
-          },
-          {
-            displayName: 'Deinterlace',
-            name: 'deinterlace',
-            type: 'boolean',
-            default: false,
-          },
-          {
-            displayName: 'Deflicker',
-            name: 'deflicker',
-            type: 'boolean',
-            default: false,
-          },
-          {
             displayName: 'HDR Mode',
             name: 'hdr',
             type: 'options',
@@ -321,6 +301,33 @@ export class VideoUpscaler implements INodeType {
               { name: 'HLG', value: 'hlg' },
             ],
             default: 'none',
+          },
+          {
+            displayName: 'Idempotency Key',
+            name: 'idempotencyKey',
+            type: 'string',
+            default: '',
+            description: 'Unique key (1–255 ASCII chars) so retries never charge twice',
+          },
+          {
+            displayName: 'Slow Motion',
+            name: 'slowMotion',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            displayName: 'Stabilize Video',
+            name: 'stabilize',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            displayName: 'Webhook URL',
+            name: 'webhookUrl',
+            type: 'string',
+            default: '',
+            placeholder: 'https://hooks.zapier.com/hooks/catch/...',
+            description: 'Public https:// URL to receive a POST when the task completes or fails',
           },
         ],
       },
@@ -361,12 +368,12 @@ export class VideoUpscaler implements INodeType {
         displayName: 'Limit',
         name: 'limit',
         type: 'number',
-        default: 20,
+        default: 50,
         typeOptions: {
           minValue: 1,
           maxValue: 100,
         },
-        description: 'Number of tasks per page (1–100)',
+        description: 'Max number of results to return',
         displayOptions: {
           show: {
             resource: ['task'],
@@ -460,7 +467,11 @@ export class VideoUpscaler implements INodeType {
               )) as IDataObject;
             }
             if (task.status === 'failed') {
-              throw new Error(String(task.error || 'VideoUpscaler task failed'));
+              throw new NodeOperationError(
+                this.getNode(),
+                String(task.error || 'VideoUpscaler task failed'),
+                { itemIndex: i }
+              );
             }
           }
 
@@ -485,7 +496,7 @@ export class VideoUpscaler implements INodeType {
           )) as IDataObject;
           returnData.push({ json: task, pairedItem: { item: i } });
         } else if (resource === 'task' && operation === 'list') {
-          const limit = this.getNodeParameter('limit', i, 20) as number;
+          const limit = this.getNodeParameter('limit', i, 50) as number;
           const page = this.getNodeParameter('page', i, 1) as number;
           const list = (await this.helpers.httpRequestWithAuthentication.call(
             this,
@@ -518,7 +529,7 @@ export class VideoUpscaler implements INodeType {
           });
           continue;
         }
-        throw error;
+        throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: i });
       }
     }
 

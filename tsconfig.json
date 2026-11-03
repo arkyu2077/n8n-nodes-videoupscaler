@@ -10,7 +10,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "n8n-workflow": ["./n8n-types.ts"]
+    }
   },
   "include": ["credentials/**/*", "nodes/**/*", "index.ts", "n8n-types.ts"],
   "exclude": ["node_modules", "dist", "test"]

@@ -1,8 +1,21 @@
-import type { ICredentialType, INodeProperties } from '../n8n-types';
+import type {
+  IAuthenticateGeneric,
+  ICredentialTestRequest,
+  ICredentialType,
+  INodeProperties,
+  Icon,
+} from 'n8n-workflow';
 
 export class VideoUpscalerApi implements ICredentialType {
   name = 'videoUpscalerApi';
+
   displayName = 'VideoUpscaler API';
+
+  icon: Icon = {
+    light: 'file:videoupscaler.svg',
+    dark: 'file:videoupscaler.dark.svg',
+  };
+
   documentationUrl = 'https://videoupscaler.co/docs/authentication';
 
   properties: INodeProperties[] = [
@@ -26,8 +39,8 @@ export class VideoUpscalerApi implements ICredentialType {
     },
   ];
 
-  authenticate = {
-    type: 'generic' as const,
+  authenticate: IAuthenticateGeneric = {
+    type: 'generic',
     properties: {
       headers: {
         Authorization: '=Bearer {{$credentials.apiKey}}',
@@ -35,7 +48,7 @@ export class VideoUpscalerApi implements ICredentialType {
     },
   };
 
-  test = {
+  test: ICredentialTestRequest = {
     request: {
       baseURL: '={{$credentials.baseUrl}}',
       url: '/account',
